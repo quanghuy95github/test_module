@@ -23,5 +23,5 @@ class PostEloquentRepository extends EloquentRepository implements PostRepositor
     public function getPostHost()
     {
         return $this->_model::where('created_at', '>=', Carbon::now()->subMonth())->orderBy('view', 'desc')->take(5)->get();
-    };
+    }
 }

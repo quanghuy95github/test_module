@@ -1,5 +1,5 @@
 <?php
-namespace App\Repositories\Post
+namespace App\Repositories\Post;
 
 interface PostRepositoryInterface
 {
