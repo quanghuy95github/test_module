@@ -14,3 +14,32 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+
+Route::group(
+    [
+        'prefix' => 'admin',
+    ],
+    function() {
+
+        Route::get('/', 'AdminController@index')->name('admin.index');
+
+        Route::group(['prefix' => 'user'], function () {
+            Route::get('/', 'UsersController@index')->name('user.index');
+
+            Route::get('create', 'UsersController@create')->name('user.create');
+            Route::post('store', 'UsersController@store')->name('user.store');
+
+            Route::get('edit', 'UsersController@edit')->name('user.edit');
+            Route::post('update', 'UsersController@update')->name('user.update');
+
+            Route::get('destroy', 'UsersController@destroy')->name('user.destroy');
+        });
+
+        Route::group(['prefix' => 'role'], function () {
+
+            Route::get('/', 'RolesController@index')->name('user.index');
+            Route::post('update', 'RolesController@update')->name('user.update');
+        });
+});
