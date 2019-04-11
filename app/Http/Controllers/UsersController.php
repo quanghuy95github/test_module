@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\User;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -10,7 +11,7 @@ use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Repositories\UserRepository;
-use App\Validators\UserValidator;
+use App\Repositories\RoleRepository;
 
 /**
  * Class UsersController.
@@ -22,12 +23,12 @@ class UsersController extends Controller
     /**
      * @var UserRepository
      */
-    protected $repository;
+    protected $userRepository;
 
     /**
-     * @var UserValidator
+     * @var UserRepository
      */
-    protected $validator;
+    protected $roleRepository;
 
     /**
      * UsersController constructor.
@@ -35,10 +36,10 @@ class UsersController extends Controller
      * @param UserRepository $repository
      * @param UserValidator $validator
      */
-    public function __construct(UserRepository $repository, UserValidator $validator)
+    public function __construct(UserRepository $userRepository, RoleRepository $roleRepository)
     {
-        $this->repository = $repository;
-        $this->validator  = $validator;
+        $this->userRepository = $userRepository;
+        $this->roleRepository = $roleRepository;
     }
 
     /**
@@ -48,17 +49,22 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $users = $this->repository->all();
+        $users = $this->userRepository->getInforUser();
 
-        if (request()->wantsJson()) {
+        return view('admin.users.index', ['users' => $users['data'], 'pagination' => $users['pagination']]);
+    }
 
-            return response()->json([
-                'data' => $users,
-            ]);
-        }
-
-        return view('users.index', compact('users'));
+    /**
+     * Show the form for creating the specified resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function  create()
+    {
+        $roles = $this->roleRepository->all();
+        $users = $this->userRepository->all();
+dd($roles);
+        return view('admin.users.create', ['roles' => $roles]);
     }
 
     /**
@@ -72,33 +78,7 @@ class UsersController extends Controller
      */
     public function store(UserCreateRequest $request)
     {
-        try {
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
-            $user = $this->repository->create($request->all());
-
-            $response = [
-                'message' => 'User created.',
-                'data'    => $user->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-        }
     }
 
     /**
@@ -110,7 +90,7 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        $user = $this->repository->find($id);
+        $user = $this->userRepository->find($id);
 
         if (request()->wantsJson()) {
 
@@ -131,7 +111,7 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        $user = $this->repository->find($id);
+        $user = $this->userRepository->find($id);
 
         return view('users.edit', compact('user'));
     }
@@ -148,35 +128,7 @@ class UsersController extends Controller
      */
     public function update(UserUpdateRequest $request, $id)
     {
-        try {
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-
-            $user = $this->repository->update($request->all(), $id);
-
-            $response = [
-                'message' => 'User updated.',
-                'data'    => $user->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-        }
     }
 
 
@@ -189,7 +141,7 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        $deleted = $this->repository->delete($id);
+        $deleted = $this->userRepository->delete($id);
 
         if (request()->wantsJson()) {
 

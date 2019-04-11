@@ -4,21 +4,9 @@
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
 
-    @include('admin.partials.entete')
+    @yield('content')
 
-    <!-- Main content -->
-    <section class="content">
-
-        <!-- Main row -->
-        <div class="row">
-            @yield('content')
-        </div>
-        <!-- /.row (main row) -->
-
-    </section>
-    <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
 

@@ -11,5 +11,11 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface UserRepository extends RepositoryInterface
 {
-    //
+    /**
+     * get full info user
+     *
+     * @return string fullname
+     */
+    public  function getInforUser();
+
 }

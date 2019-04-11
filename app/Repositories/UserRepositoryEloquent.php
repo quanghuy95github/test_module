@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Presenters\UserPresenter;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\UserRepository;
@@ -33,6 +34,19 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
     public function boot()
     {
         $this->pushCriteria(app(RequestCriteria::class));
+        $this->setPresenter(app(UserPresenter::class));
     }
-    
+
+
+    /**
+     * get full info user
+     *
+     * @return string fullname
+     */
+    public  function getInforUser()
+    {
+        return $this->with('role')->paginate(2);
+    }
+
+
 }
