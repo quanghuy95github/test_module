@@ -47,9 +47,14 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = $this->userRepository->getInforUser();
+        $users = $this->userRepository->retrieveInforUsers();
+
+        if($request->ajax())
+        {
+            return view('admin.users.ajax_users', ['users' => $users['data']]);
+        }
 
         return view('admin.users.index', ['users' => $users['data'], 'pagination' => $users['pagination']]);
     }
@@ -63,7 +68,7 @@ class UsersController extends Controller
     {
         $roles = $this->roleRepository->all();
         $users = $this->userRepository->all();
-dd($roles);
+
         return view('admin.users.create', ['roles' => $roles]);
     }
 
@@ -90,16 +95,9 @@ dd($roles);
      */
     public function show($id)
     {
-        $user = $this->userRepository->find($id);
+        $user = $this->userRepository->retrieveUserById($id);
 
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $user,
-            ]);
-        }
-
-        return view('users.show', compact('user'));
+        return view('admin.users.show', compact('user'));
     }
 
     /**

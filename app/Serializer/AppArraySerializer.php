@@ -56,10 +56,11 @@ class AppArraySerializer extends DataArraySerializer
     {
         return [
             'pagination' => [
-                'current_page' => $paginator->getCurrentPage(),
-                'per_page' => $paginator->getPerPage(),
-                'total' => $paginator->getTotal(),
-                'html' => $paginator->getPaginator()->links()
+                'current_page'      => $paginator->getCurrentPage(),
+                'per_page'          => $paginator->getPerPage(),
+                'total'             => $paginator->getTotal(),
+                'html'              => $paginator->getPaginator()->links(),
+                'showing_entities'  => $this->showing_entities($paginator),
             ]
         ];
     }
@@ -71,6 +72,33 @@ class AppArraySerializer extends DataArraySerializer
     public function meta(array $meta)
     {
         $response = parent::meta($meta);
+        if(empty($response)) {
+            return [];
+        }
         return ['pagination' => $response['meta']['pagination']];
     }
+
+    /**
+     * return text showing entites
+     *
+     * @param PaginatorInterface $paginator
+     */
+    Public function  showing_entities(PaginatorInterface $paginator)
+    {
+        $text = "";
+        $total_page = ceil($paginator->getTotal() / $paginator->getPerPage());
+        if($total_page > 1)
+        {
+            $end_page_entity = $paginator->getCurrentPage() * $paginator->getPerPage();
+
+            $start_page_entity = $end_page_entity - ($paginator->getPerPage() - 1);
+
+            $end_page_entity = $paginator->getLastPage() == $paginator->getCurrentPage() ? $paginator->getTotal() : $end_page_entity;
+
+            $text = "Showing " . $start_page_entity . " to " . $end_page_entity . " of " . $paginator->getTotal() ." entries";
+        }
+
+        return $text;
+    }
+
 }

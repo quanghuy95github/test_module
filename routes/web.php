@@ -34,12 +34,13 @@ Route::group(
             Route::get('edit', 'UsersController@edit')->name('user.edit');
             Route::post('update', 'UsersController@update')->name('user.update');
 
+            Route::get('show/{id}', 'UsersController@show')->name('user.show');
             Route::get('destroy', 'UsersController@destroy')->name('user.destroy');
         });
 
         Route::group(['prefix' => 'role'], function () {
 
-            Route::get('/', 'RolesController@index')->name('user.index');
-            Route::post('update', 'RolesController@update')->name('user.update');
+            Route::get('/', 'RolesController@index')->name('role.index');
+            Route::post('update', 'RolesController@update')->name('role.update');
         });
 });

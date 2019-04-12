@@ -16,6 +16,13 @@ interface UserRepository extends RepositoryInterface
      *
      * @return string fullname
      */
-    public  function getInforUser();
+    public  function retrieveInforUsers();
+
+    /**
+     * get infor user by id
+     *
+     * @return array user
+     */
+    public  function retrieveUserById($id);
 
 }

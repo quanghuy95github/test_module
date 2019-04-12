@@ -41,12 +41,20 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
     /**
      * get full info user
      *
-     * @return string fullname
+     * @return array users
      */
-    public  function getInforUser()
+    public function retrieveInforUsers()
     {
-        return $this->with('role')->paginate(2);
+        return $this->with('role')->paginate(1);
     }
 
-
+    /**
+     * get infor user by id
+     *
+     * @return array user
+     */
+    public function retrieveUserById($id)
+    {
+        return $this->with('role')->find($id);
+    }
 }
