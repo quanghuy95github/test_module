@@ -34,5 +34,23 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
+
+
+    /**
+     * retrieve Roles for User
+     *
+     * return array
+     */
+    public  function retrieveRolesForUser()
+    {
+        $result = [];
+        $roles = $this->all()->toArray();
+        foreach ($roles as $role)
+        {
+            $result[$role['id']] = $role['name'];
+        }
+
+        return $result;
+    }
     
 }

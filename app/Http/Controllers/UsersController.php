@@ -66,10 +66,9 @@ class UsersController extends Controller
      */
     public function  create()
     {
-        $roles = $this->roleRepository->all();
-        $users = $this->userRepository->all();
+        $roles = $this->roleRepository->retrieveRolesForUser();
 
-        return view('admin.users.create', ['roles' => $roles]);
+        return view('admin.users.create', compact('roles'));
     }
 
     /**
@@ -83,7 +82,7 @@ class UsersController extends Controller
      */
     public function store(UserCreateRequest $request)
     {
-
+//dd($request->all());
     }
 
     /**

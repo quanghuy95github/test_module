@@ -48,6 +48,7 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
         return $this->with('role')->paginate(1);
     }
 
+
     /**
      * get infor user by id
      *
@@ -57,4 +58,15 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
     {
         return $this->with('role')->find($id);
     }
+
+
+    /**
+     * create user
+     *
+     */
+    public function createUser($request)
+    {
+
+    }
+
 }

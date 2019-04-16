@@ -33,8 +33,8 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class=""><a href="{{ route('user.index') }}"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
+                    <li class=""><a href="{{ route('user.index') }}"><i class="fa fa-circle-o"></i> List Users</a></li>
+                    <li><a href="{{ route('user.create') }}"><i class="fa fa-circle-o"></i> Create User</a></li>
                 </ul>
             </li>
             <li class="header">LABELS</li>
